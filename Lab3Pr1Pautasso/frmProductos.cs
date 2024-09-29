@@ -44,6 +44,7 @@ namespace Lab3Pr1Pautasso
                 txtDescripcion.Text = item.SubItems[2].Text;
                 txtPrecio.Text = item.SubItems[3].Text;
                 txtStock.Text = item.SubItems[4].Text;
+                txtCodigo.Text = item.SubItems[0].Text;
 
                 // Utiliza FindStringExact para encontrar el ítem en el ComboBox
                 //sin FindStringExact me pasaba que en el metodo CargarCombo se seleccionaba una categoria
@@ -54,6 +55,24 @@ namespace Lab3Pr1Pautasso
                 {
                     cboCategoria.SelectedIndex = indice;
                 }
+            }
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("¿Estás seguro de eliminar este registro?", "Confirmación", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+               
+                int codigo = int.Parse(txtCodigo.Text);
+                conexion.Eliminar(codigo);
+                // Limpia los controles después de eliminar
+                txtNombre.Clear();
+                txtDescripcion.Clear();
+                txtPrecio.Clear();
+                txtStock.Clear();
+                cboCategoria.SelectedIndex = -1;
+                txtCodigo.Clear();
+                conexion.MostrarListView(LvMostrar);
             }
         }
     }

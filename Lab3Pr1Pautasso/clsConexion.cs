@@ -142,6 +142,29 @@ namespace Lab3Pr1Pautasso
             }
         }
 
+        public void Eliminar(int codigo)
+        {
+            try
+            {
+                using (SqlConnection conexion = new SqlConnection(cadena))
+                {
+                    conexion.Open();
+                    string query = "DELETE FROM PRODUCTOS1 WHERE Codigo = @Codigo";
+                    SqlCommand comando = new SqlCommand(query, conexion);
+                    comando.Parameters.AddWithValue("@Codigo", codigo);
+                    comando.ExecuteNonQuery();
+                    MessageBox.Show("Registro eliminado con éxito");
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error de eliminación: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error inesperado: " + ex.Message);
+            }
+        }
 
 
 
