@@ -35,7 +35,7 @@ namespace Lab3Pr1Pautasso
             conexion.MostrarListView(LvMostrar);
         }
 
-        private void LvMostrar_SelectedIndexChanged(object sender, EventArgs e)
+        private void LvMostrar_SelectedIndexChanged(object sender, EventArgs e) // listo 
         {
             if (LvMostrar.SelectedItems.Count > 0)
             {
@@ -46,6 +46,9 @@ namespace Lab3Pr1Pautasso
                 txtStock.Text = item.SubItems[4].Text;
 
                 // Utiliza FindStringExact para encontrar el ítem en el ComboBox
+                //sin FindStringExact me pasaba que en el metodo CargarCombo se seleccionaba una categoria
+                // y chocaba con la categoria seleccionada en el evento
+                // LvMostrar SelectedIndexChanged y no mostraba nada
                 int indice = cboCategoria.FindStringExact(item.SubItems[5].Text);
                 if (indice != -1)
                 {
