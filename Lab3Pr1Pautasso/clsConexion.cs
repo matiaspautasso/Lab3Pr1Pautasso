@@ -54,29 +54,36 @@ namespace Lab3Pr1Pautasso
 
         public void Insertar(string nombre, string descripcion, decimal precio, int stock, string categoria)
         {
-            try
+            if (!ExisteRegistro(nombre))
             {
-                using (SqlConnection conexion = new SqlConnection(cadena))
+                try
                 {
-                    conexion.Open();
-                    string query = "INSERT INTO PRODUCTOS1 (Nombre, Descripcion, Precio, Stock, Categoria) VALUES (@Nombre, @Descripcion, @Precio, @Stock, @Categoria)";
-                    SqlCommand comando = new SqlCommand(query, conexion);
-                    comando.Parameters.AddWithValue("@Nombre", nombre);
-                    comando.Parameters.AddWithValue("@Descripcion", descripcion);
-                    comando.Parameters.AddWithValue("@Precio", precio);
-                    comando.Parameters.AddWithValue("@Stock", stock);
-                    comando.Parameters.AddWithValue("@Categoria", categoria);
-                    comando.ExecuteNonQuery();
-                    MessageBox.Show("Registro insertado con éxito");
+                    using (SqlConnection conexion = new SqlConnection(cadena))
+                    {
+                        conexion.Open();
+                        string query = "INSERT INTO PRODUCTOS1 (Nombre, Descripcion, Precio, Stock, Categoria) VALUES (@Nombre, @Descripcion, @Precio, @Stock, @Categoria)";
+                        SqlCommand comando = new SqlCommand(query, conexion);
+                        comando.Parameters.AddWithValue("@Nombre", nombre);
+                        comando.Parameters.AddWithValue("@Descripcion", descripcion);
+                        comando.Parameters.AddWithValue("@Precio", precio);
+                        comando.Parameters.AddWithValue("@Stock", stock);
+                        comando.Parameters.AddWithValue("@Categoria", categoria);
+                        comando.ExecuteNonQuery();
+                        MessageBox.Show("Registro insertado con éxito");
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Error de inserción: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error inesperado: " + ex.Message);
                 }
             }
-            catch (SqlException ex)
+            else
             {
-                MessageBox.Show("Error de inserción: " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error inesperado: " + ex.Message);
+                MessageBox.Show("Ya existe un registro con este nombre");
             }
         }//listo
         public void MostrarListView(ListView lvwProductos)
@@ -159,6 +166,59 @@ namespace Lab3Pr1Pautasso
             catch (SqlException ex)
             {
                 MessageBox.Show("Error de eliminación: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error inesperado: " + ex.Message);
+            }
+        }
+        public bool ExisteRegistro(string nombre)
+        {
+            try
+            {
+                using (SqlConnection conexion = new SqlConnection(cadena))
+                {
+                    conexion.Open();
+                    string query = "SELECT COUNT(*) FROM PRODUCTOS1 WHERE Nombre = @Nombre";
+                    SqlCommand comando = new SqlCommand(query, conexion);
+                    comando.Parameters.AddWithValue("@Nombre", nombre);
+                    int cantidad = (int)comando.ExecuteScalar();
+                    return cantidad > 0;
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error de consulta: " + ex.Message);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error inesperado: " + ex.Message);
+                return false;
+            }
+        }
+        public void Actualizar(int codigo, string nombre, string descripcion, decimal precio, int stock, string categoria)
+        {
+            try
+            {
+                using (SqlConnection conexion = new SqlConnection(cadena))
+                {
+                    conexion.Open();
+                    string query = "UPDATE PRODUCTOS1 SET Nombre = @Nombre, Descripcion = @Descripcion, Precio = @Precio, Stock = @Stock, Categoria = @Categoria WHERE Codigo = @Codigo";
+                    SqlCommand comando = new SqlCommand(query, conexion);
+                    comando.Parameters.AddWithValue("@Codigo", codigo);
+                    comando.Parameters.AddWithValue("@Nombre", nombre);
+                    comando.Parameters.AddWithValue("@Descripcion", descripcion);
+                    comando.Parameters.AddWithValue("@Precio", precio);
+                    comando.Parameters.AddWithValue("@Stock", stock);
+                    comando.Parameters.AddWithValue("@Categoria", categoria);
+                    comando.ExecuteNonQuery();
+                    MessageBox.Show("Registro actualizado con éxito");
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error de actualización: " + ex.Message);
             }
             catch (Exception ex)
             {

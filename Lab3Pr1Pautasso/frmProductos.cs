@@ -33,6 +33,12 @@ namespace Lab3Pr1Pautasso
         {
             conexion.Insertar(txtNombre.Text,txtDescripcion.Text,Decimal.Parse(txtPrecio.Text),Convert.ToInt32(txtStock.Text),cboCategoria.Text);
             conexion.MostrarListView(LvMostrar);
+            txtNombre.Clear();
+            txtDescripcion.Clear();
+            txtPrecio.Clear();
+            txtStock.Clear();
+            cboCategoria.SelectedIndex = -1;
+            txtCodigo.Clear();
         }
 
         private void LvMostrar_SelectedIndexChanged(object sender, EventArgs e) // listo 
@@ -74,6 +80,26 @@ namespace Lab3Pr1Pautasso
                 txtCodigo.Clear();
                 conexion.MostrarListView(LvMostrar);
             }
+        }
+
+        private void btnActualizar_Click(object sender, EventArgs e)
+        {
+            
+            int codigo = int.Parse(txtCodigo.Text);
+            string nombre = txtNombre.Text;
+            string descripcion = txtDescripcion.Text;
+            decimal precio = decimal.Parse(txtPrecio.Text);
+            int stock = int.Parse(txtStock.Text);
+            string categoria = cboCategoria.SelectedItem.ToString();
+            conexion.Actualizar(codigo, nombre, descripcion, precio, stock, categoria);
+            // Limpia los controles después de actualizar
+            txtNombre.Clear();
+            txtDescripcion.Clear();
+            txtPrecio.Clear();
+            txtStock.Clear();
+            cboCategoria.SelectedIndex = -1;
+            txtCodigo.Clear();
+            conexion.MostrarListView(LvMostrar  );
         }
     }
 }
